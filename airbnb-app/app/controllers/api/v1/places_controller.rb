@@ -1,4 +1,4 @@
-class Api::V1:PlacesController < Api::V1::BaseController
+class Api::V1::PlacesController < Api::V1::BaseController
   def index
     places = Place.search(search_params.to_h.symbolize_keys)
     respond_with places
