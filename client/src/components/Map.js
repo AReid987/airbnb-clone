@@ -10,7 +10,7 @@ const AirbnbMap = withGoogleMap(props => (
   </GoogleMap>
 ));
 
-export class Map extends React.Component {
+export class Map extends Component {
   constructor(props) {
     super(props)
 
