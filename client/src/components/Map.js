@@ -4,9 +4,20 @@ import { PlaceMarker } from './PlaceMarker'
 
 const AirbnbMap = withGoogleMap(props => (
   <GoogleMap
+  ref={props.onMapMounted}
+    onZoomChanged={props.handleMapChanged}
+    onDragEnds={props.handleMapChanged}
+    onBoundsChanged={props.handleMapFullyLoaded}
     defaultCenter={props.center}
     defaultZoom={props.zoom} >
-    {props.places}
+    {props.places.length > 0 && props.places.map(place => (
+      <PlaceMarker lat={30.2672}
+                   lng={97.7431}
+                   description={'Description'}
+                   name={'Hotel'}
+                   price={'10'} />
+      ))
+    }
   </GoogleMap>
 ));
 
