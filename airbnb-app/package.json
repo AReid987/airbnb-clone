@@ -1,5 +1,7 @@
 {
   "name": "airbnb-app",
   "private": true,
-  "dependencies": {}
+  "dependencies": {
+    "react-redux": "^5.0.7"
+  }
 }
