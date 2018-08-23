@@ -8,7 +8,7 @@
 
 #30.2672 97.7431
 
-center_point = { lat: 30.2672, lng: 97.7431 }
+center_point = { lat: 30.2672, lng: -97.7431 }
 
 1.upto(1000) do |i|
   Place.create!(

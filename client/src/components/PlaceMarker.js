@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Marker } from 'react-google-maps';
 import { PlaceInfoWindow } from './PlaceInfoWindow';
 
-export class PlaceMarker extends React.Component {
+export class PlaceMarker extends Component {
   constructor(props){
     super(props)
 
@@ -20,6 +20,7 @@ export class PlaceMarker extends React.Component {
   }
 
 
+
   render() {
     const { showTooltip } = this.state
     const { lat, lng, name, price, description } = this.props
@@ -32,7 +33,8 @@ export class PlaceMarker extends React.Component {
         }}
         onClick={this.clickTooltip.bind(this)}>
         {showTooltip && (
-          <PlaceInfoWindow description={description}
+          <PlaceInfoWindow
+            description={description}
             name={name}
             price={price}
             closeWindow={this.closeWindow.bind(this)}/>

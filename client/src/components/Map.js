@@ -1,27 +1,7 @@
 import React, { Component } from 'react'
 import { withGoogleMap, GoogleMap } from 'react-google-maps'
 import { PlaceMarker } from './PlaceMarker'
-
-const AirbnbMap = withGoogleMap(props => (
-  <GoogleMap
-  ref={props.onMapMounted}
-    onZoomChanged={props.handleMapChanged}
-    onDragEnds={props.handleMapChanged}
-    onBoundsChanged={props.handleMapFullyLoaded}
-    defaultCenter={props.center}
-    defaultZoom={props.zoom} >
-    {props.places.length > 0 && props.places.map(place => (
-      <PlaceMarker key={`place${place.id}`}
-                     id={place.id}
-                     lat={place.latitude}
-                     lng={place.longitude}
-                     description={place.description}
-                     name={place.name}
-                     price={place.price} />
-      ))
-    }
-  </GoogleMap>
-));
+import { AirbnbMap } from './AirbnbMap'
 
 export class Map extends Component {
   constructor(props) {
@@ -36,7 +16,7 @@ export class Map extends Component {
     this.state = {
       places: [],
       lat: 30.2672,
-      lng: 97.7431
+      lng: -97.7431
     }
   }
 
@@ -51,12 +31,13 @@ export class Map extends Component {
   }
 
   handleMapFullyLoaded() {
-    if (this.mapFullyLoaded)
+    if (this.mapFullyLoaded) {
       return
-
-    this.mapFullyLoaded = true
-    this.handleMapChanged()
+        this.mapFullyLoaded = true
+        this.handleMapChanged()
+      }
   }
+
 
   setMapCenterPoint() {
     this.setState({
@@ -68,16 +49,19 @@ export class Map extends Component {
   fetchPlacesFromApi() {
     this.setState({ places: [] })
 
-    fetch(`/api/places?min_lng=${this.xMapBounds.min}&max_lng=${this.xMapBounds.max}&min_lat=${this.yMapBounds.min}&max_lat=${this.yMapBounds.max}`,
+    fetch(`/api/v1/places?min_lng=${this.xMapBounds.min}&max_lng=${this.xMapBounds.max}&min_lat=${this.yMapBounds.min}&max_lat=${this.yMapBounds.max}`,
       { method: 'GET' })
       .then((response) => response.json())
-      .then((response) => this.setState({ places: response }))
+      .then((response) => this.setState({
+         places: response
+       })
+     )
   }
 
   getMapBounds() {
-    let mapBounds = this.map.getBounds()
-    let xMapBounds = mapBounds.b
-    let yMapBounds = mapBounds.f
+    var mapBounds = this.map.getBounds()
+    var xMapBounds = mapBounds.b
+    var yMapBounds = mapBounds.f
 
     this.xMapBounds.min = xMapBounds.b
     this.xMapBounds.max = xMapBounds.f
@@ -87,8 +71,7 @@ export class Map extends Component {
   }
 
   render(){
-    const { lat, lng } = this.state
-    const places = [<PlaceMarker lat={lat} lng={lng} price={20} name={"hotel"} description={"hotel description"} />]
+    const { lat, lng, places} = this.state
 
     return(
       <div style={{width: `750px`, height: `750px`}}>
