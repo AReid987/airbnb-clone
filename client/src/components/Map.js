@@ -25,12 +25,59 @@ export class Map extends Component {
   constructor(props) {
     super(props)
 
+    this.xMapBounds = { min: null, max: null }
+    this.yMapBounds = { min: null, max: null }
+
+    this.mapFullyLoaded = false
     this.zoom = 7
 
     this.state = {
+      places: [],
       lat: 30.2672,
       lng: 97.7431
     }
+  }
+
+  handleMapChanged() {
+    this.getMapBounds()
+    this.setMapCenterPoint()
+    this.fetchPlacesFromApi()
+  }
+
+  handleMapMounted(map) {
+    this.map = map
+  }
+
+  handleMapFullyLoaded() {
+    if (this.mapFullyLoaded)
+      return
+
+    this.mapFullyLoaded = true
+    this.handleMapChanged()
+  }
+
+  setMapCenterPoint() {
+    this.setState({
+      lat: this.map.getCenter().lat(),
+      lng: this.map.getCenter().lng()
+    })
+  }
+
+  fetchPlacesFromApi() {
+  const place = <PlaceMarker lat={30.2672} lng={97.7431} price={20} name={"Hotel"} description={"Hotel desc"} />
+  this.setState({ places: [place] })
+}
+
+  getMapBounds() {
+    let mapBounds = this.map.getBounds()
+    let xMapBounds = mapBounds.b
+    let yMapBounds = mapBounds.f
+
+    this.xMapBounds.min = xMapBounds.b
+    this.xMapBounds.max = xMapBounds.f
+
+    this.yMapBounds.min = yMapBounds.f
+    this.yMapBounds.max = yMapBounds.b
   }
 
   render(){
@@ -39,7 +86,18 @@ export class Map extends Component {
 
     return(
       <div style={{width: `750px`, height: `750px`}}>
+        <ul>
+          <li>lng: {lng}</li>
+          <li>lat: {lat}</li>
+          <li>xMapBounds.min: {this.xMapBounds.min}</li>
+          <li>xMapBounds.max: {this.xMapBounds.max}</li>
+          <li>yMapBounds.min: {this.yMapBounds.min}</li>
+          <li>yMapBounds.max: {this.yMapBounds.max}</li>
+        </ul>
         <AirbnbMap
+          onMapMounted={this.handleMapMounted.bind(this)}
+          handleMapChanged={this.handleMapChanged.bind(this)}
+          handleMapFullyLoaded={this.handleMapFullyLoaded.bind(this)}
           center={{
             lat: lat,
             lng: lng
